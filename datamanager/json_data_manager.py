@@ -2,14 +2,19 @@ import json
 from .data_manager_interface import DataManagerInterface
 import requests
 
-API_KEY = "cfb1ce63"
-API_MOVIE_URL = f"http://www.omdbapi.com/?t={title}&apikey={API_KEY}"
-
 
 class JSONDataManager(DataManagerInterface):
     """ Inherits from Storage and implements its functions."""
     def __init__(self, filename):
         self.filename = filename
+
+    def load_movies_data(self, title):
+        API_KEY = "cfb1ce63"
+        API_MOVIE_URL = f"http://www.omdbapi.com/?t={title}&apikey={API_KEY}"
+        res = requests.get(API_MOVIE_URL)
+        movies_data = json.loads(res.text)
+        return movies_data
+        #print(f'Movie {movies_data["Title"]} successfully added')
 
     def get_all_users(self):
         """ Return all the users."""
@@ -28,43 +33,68 @@ class JSONDataManager(DataManagerInterface):
                 print(user_movie_list)
                 return user_movie_list
 
-    def add_user_movie(self, title):
-        """ Adds a movie to the movie database and saves it."""
-        res = requests.get(API_MOVIE_URL)
-        movies_data = json.loads(res.text)
-        print(f'Movie {movies_data["Title"]} successfully added')
+    def add_user(self, user_id, name):
+        """ Add a new user."""
+        all_users = self.get_all_users()
+        new_user = {"id": user_id,
+                    "name": name,
+                    "movies": []}
+        if user_id not in all_users["id"]:
+            all_users.append(new_user)
+            return all_users
 
-        with open("data.json", "r") as handle:
-            exist_data = json.loads(handle.read())
 
-        new_movie_data = {
-            movies_data["Title"]: {
-                "year": movies_data["Year"],
-                "rating": movies_data["imdbRating"],
-                "image": movies_data["Poster"]
-            }
-        }
-        new_dict = {**exist_data, **new_movie_data}
+    def add_movie(self, user_id, title):
+        """ Adds a movie to the user movie list and saves it."""
+        list_of_users = self.get_all_users()
+        exist_movie_list = self.get_user_movies()
+        for user in list_of_users:
+            if user["id"] == user_id:
+                for movie in exist_movie_list:
+                    if movie["name"] != title:
+                        # Generate a unique identifier for the new movie
+                        new_movie_id = len(exist_movie_list) + 1
+                        new_movie_data = {
+                                "id": new_movie_id,
+                                "name": exist_movie_list["Title"],
+                                "director": exist_movie_list["Director"],
+                                "year": exist_movie_list["Year"],
+                                "rating": exist_movie_list["imdbRating"],
+                                "image": exist_movie_list["Poster"]
+                            }
+                        new_dict = {**exist_movie_list, **new_movie_data}
 
-        with open("data.json", "w") as save_file:
-            json_file = json.dumps(new_dict)
-            saved_movies = save_file.write(json_file)
-        return saved_movies
+                        with open("movies.json", "w") as save_file:
+                            json_file = json.dumps(new_dict)
+                            saved_movies = save_file.write(json_file)
+                        return saved_movies
 
-    def delete_user_movie(self, title):
+    def delete_movie(self, user_id,  title):
         """Deletes a movie from the movies database"""
-        exist_movies_data = self.list_movies()
-        del (exist_movies_data[title])
+        list_of_users = self.get_all_users()
+        exist_movie_list = self.get_user_movies()
+        #exist_movies_data = self.list_movies()
+        for user in list_of_users:
+            if user["id"] == user_id:
+                for movie in exist_movie_list:
+                    if movie["name"] == title:
+                        del (exist_movie_list[title])
         with open("data.json", "w") as save_file:
-            json.dump(exist_movies_data, save_file)
+            json.dump(exist_movie_list, save_file)
         return
 
-    def update_user_movie(self, title, new_rating):
+    def update_movie(self, user_id, title, new_rating):
         """Updates a movie from the movies database with a new rating"""
-        movies_data = self.list_movies()
-        for key, val in movies_data.items():
-            if title == key:
-                val["rating"] = new_rating
-                with open("data.json", "w") as save_file:
-                    json.dump(movies_data, save_file)
-                    return movies_data
+        list_of_users = self.get_all_users()
+        exist_movie_list = self.get_user_movies()
+        for user in list_of_users:
+            if user["id"] == user_id:
+                for movie in exist_movie_list:
+                    if movie["name"] == title:
+        #movies_data = self.list_movies()
+                        for key, val in movie.items():
+                            if title == key:
+                                val["rating"] = new_rating
+        with open("movies.json", "w") as save_file:
+            json.dump(exist_movie_list, save_file)
+            return exist_movie_list
