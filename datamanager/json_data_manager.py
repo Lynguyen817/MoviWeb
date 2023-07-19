@@ -26,6 +26,7 @@ class JSONDataManager(DataManagerInterface):
 
     def get_user_movies(self, user_id):
         """ Return all the movies for a given user."""
+        self.load_movies_data()
         self.get_all_users()
         for user in self.get_all_users():
             if user['id'] == user_id:
