@@ -9,30 +9,27 @@ class JSONDataManager(DataManagerInterface):
         self.filename = filename
 
     def load_movies_data(self, title):
+        """Load movies from the api link when a title is input."""
         API_KEY = "cfb1ce63"
         API_MOVIE_URL = f"http://www.omdbapi.com/?t={title}&apikey={API_KEY}"
         res = requests.get(API_MOVIE_URL)
         movies_data = json.loads(res.text)
         return movies_data
-        #print(f'Movie {movies_data["Title"]} successfully added')
 
     def get_all_users(self):
         """ Return all the users."""
-        with open("movies.json", "r") as fileobj:
+        with open("MoviWeb/movies.json", "r") as fileobj:
             users_data = fileobj.read()
             list_all_users = json.loads(users_data)
-        print(list_all_users)
         return list_all_users
 
     def get_user_movies(self, user_id):
         """ Return all the movies for a given user."""
-        self.load_movies_data()
-        self.get_all_users()
+        user_favorite_movies = []
         for user in self.get_all_users():
-            if user['id'] == user_id:
-                user_movie_list = user['movie']
-                print(user_movie_list)
-                return user_movie_list
+            if user['id'] == int(user_id.strip("<>")):
+                user_favorite_movies.append(user['movies'])
+                return user_favorite_movies
 
     def add_user(self, user_id, name):
         """ Add a new user."""
@@ -43,7 +40,6 @@ class JSONDataManager(DataManagerInterface):
         if user_id not in all_users["id"]:
             all_users.append(new_user)
             return all_users
-
 
     def add_movie(self, user_id, title):
         """ Adds a movie to the user movie list and saves it."""

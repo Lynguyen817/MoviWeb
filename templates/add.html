@@ -4,14 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add New User</title>
+    <script>
+        a {text-decoration:none}
+    </script>
 </head>
 <body>
-    <h1>Add New User</h1>
-    <form action="/register" method="POST">
-      <input type="text" id="name" name="name" value="Username"><br/>
-      <input type="email" id="email" name="email" value="Email"><br/>
-      <input type="password" id="password" name="password" value="Password"><br/>
-      <input type="submit" value="Submit">
+    <h1>Create an Account</h1>
+    <form action="/add_user" method="POST">
+        <div class="mb-3 row">
+            <label for="staticUsername" class="col-sm-2 col-form-label">Username</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="staticUsername">
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control-plaintext" id="staticEmail" value="email@example.com">
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+            <div class="col-sm-10">
+              <input type="password" class="form-control" id="inputPassword">
+            </div>
+        </div>
+        <br>
+        <button>
+            <a href="/add_user">Sign up</a>
+        </button>
     </form>
 </body>
 </html>
