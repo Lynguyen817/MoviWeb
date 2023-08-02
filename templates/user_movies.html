@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ user.name }} - Favorite Movies</title>
+</head>
+<body>
+    <h1>{{ user.name }} - Favorite Movies</h1>
+    <ul>
+        {% for movie in user.movies %}
+            <li>
+                {{ movie }}
+                <a href="/users/{{ user.id }}/edit/{{ loop.index }}">Edit</a> |
+                <a href="/users/{{ user.id }}/delete/{{ loop.index }}">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
+
+
+

@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, render_template, request, redirect, url_for
 from datamanager.json_data_manager import JSONDataManager
+import uuid
 
 app = Flask(__name__)
 data_manager = JSONDataManager('movies.json')
@@ -17,21 +18,26 @@ def home():
 def list_users():
     """Returns a list of users."""
     users = data_manager.get_all_users()
-    return jsonify(users)
-    #return render_template('users.html', users=users)
+    #return jsonify(users)
+    return render_template('users.html', users=users)
 
 
 @app.route('/users/<user_id>/movies')
 def user_movies(user_id):
     """Return a list of movies for a given user_id."""
-    list_of_users_movies = data_manager.get_user_movies(user_id)
-    return jsonify(list_of_users_movies)
+    user = data_manager.get_user_movies(user_id)
+    #return jsonify(list_of_users_movies)
+    if user:
+        return render_template('user_movies.html', user=user)
+    else:
+        return " User not found", 404
 
 
 @app.route('/add_user', methods=['GET', 'POST'])
 def add_user():
-    """Get a new user and save it to the database."""
-    users = data_manager.get_all_users()
+    """Get a new user."""
+    users = data_manager.add_user()
+    #return users
     add_new_user = []
     if request.method == 'POST':
         # Get user input from the form
@@ -39,7 +45,7 @@ def add_user():
         email = request.form.get('email')
         password = request.form.get('password')
         # Generate a unique identifier for a new user
-        new_user_id = len(users) + 1
+        new_user_id = uuid.uuid4()
         # Create a new user dictionary
         new_user = {
             'id': new_user_id,
@@ -52,13 +58,10 @@ def add_user():
     return render_template('add.html')
 
 
-@app.route('/users/<user_id>/add_movie', methods=['GET','POST'])
+@app.route('/users/<user_id>/add_movie', methods=['GET', 'POST'])
 def add_movie(user_id):
-    """
-        Adds a new movie to a user's favorite movies list.
-    """
-
-    favorite_movies = data_manager.get_user_movies(user_id)
+    """Adds a new movie to a user's favorite movies list."""
+    favorite_movies = data_manager.add_movie(user_id)
     if request.method == 'POST':
         movie_title = request.form.get('title')
         # Check if the user already has a list of favorite movies

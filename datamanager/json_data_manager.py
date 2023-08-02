@@ -32,14 +32,20 @@ class JSONDataManager(DataManagerInterface):
                 return user_favorite_movies
 
     def add_user(self, user_id, name):
-        """ Add a new user."""
+        """ Add a new user and save it to the database.."""
         all_users = self.get_all_users()
         new_user = {"id": user_id,
                     "name": name,
                     "movies": []}
-        if user_id not in all_users["id"]:
-            all_users.append(new_user)
-            return all_users
+        for user in all_users:
+            if user_id == user["id"]:
+                return "User already exists."
+            else:
+                all_users.append(new_user)
+                with open("MoviWeb/movies.json", "w") as save_file:
+                    json_file = json.dumps(all_users)
+                    new_users_list = save_file.write(json_file)
+                return new_users_list
 
     def add_movie(self, user_id, title):
         """ Adds a movie to the user movie list and saves it."""
@@ -48,16 +54,18 @@ class JSONDataManager(DataManagerInterface):
         for user in list_of_users:
             if user["id"] == user_id:
                 for movie in exist_movie_list:
+                    # Get a new movie from API
+                    new_movie_api = self.load_movies_data(title)
                     if movie["name"] != title:
                         # Generate a unique identifier for the new movie
                         new_movie_id = len(exist_movie_list) + 1
                         new_movie_data = {
                                 "id": new_movie_id,
-                                "name": exist_movie_list["Title"],
-                                "director": exist_movie_list["Director"],
-                                "year": exist_movie_list["Year"],
-                                "rating": exist_movie_list["imdbRating"],
-                                "image": exist_movie_list["Poster"]
+                                "name": new_movie_api["Title"],
+                                "director": new_movie_api["Director"],
+                                "year": new_movie_api["Year"],
+                                "rating": new_movie_api["imdbRating"],
+                                "image": new_movie_api["Poster"]
                             }
                         new_dict = {**exist_movie_list, **new_movie_data}
 
