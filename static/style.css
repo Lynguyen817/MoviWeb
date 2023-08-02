@@ -5,7 +5,7 @@
 }
 
 body {
-  background: var(--background-color);
+  background: white;
   color: pink;
   font-family: var(--default-font-family);
   font-size: 25px;
@@ -61,8 +61,13 @@ h2 {
 }
 
 .container {
-  display: grid;
   grid-template-columns: 230px 230px 230px 230px;
+  background: var(--background-color);
+  width: 90%;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+  margin: auto;
 }
 
 .movie {
