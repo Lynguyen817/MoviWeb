@@ -30,6 +30,7 @@ class JSONDataManager(DataManagerInterface):
             if user['id'] == int(user_id.strip("<>")):
                 user_favorite_movies.append(user['movies'])
                 return user_favorite_movies
+        return "User not found", 404
 
     def add_user(self, user_id, name):
         """ Add a new user and save it to the database.."""

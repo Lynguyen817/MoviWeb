@@ -25,12 +25,9 @@ def list_users():
 @app.route('/users/<user_id>/movies')
 def user_movies(user_id):
     """Return a list of movies for a given user_id."""
-    user = data_manager.get_user_movies(user_id)
+    list_of_users_movies = data_manager.get_user_movies(user_id)
     #return jsonify(list_of_users_movies)
-    if user:
-        return render_template('user_movies.html', user=user)
-    else:
-        return " User not found", 404
+    return render_template('user_movies.html', user_id=user_id, list_of_users_movies=list_of_users_movies)
 
 
 @app.route('/add_user', methods=['GET', 'POST'])
