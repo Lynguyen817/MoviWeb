@@ -35,18 +35,24 @@ class JSONDataManager(DataManagerInterface):
     def add_user(self, user_id, name):
         """ Add a new user and save it to the database.."""
         all_users = self.get_all_users()
+        user_exists = False
+
+        for user in all_users:
+            if user_id == user["id"]:
+                user_exists = True
+                break
+
         new_user = {"id": user_id,
                     "name": name,
                     "movies": []}
-        for user in all_users:
-            if user_id == user["id"]:
-                return "User already exists."
-            else:
-                all_users.append(new_user)
-                with open("MoviWeb/movies.json", "w") as save_file:
-                    json_file = json.dumps(all_users)
-                    new_users_list = save_file.write(json_file)
-                return new_users_list
+        if user_exists:
+            return "User already exists."
+        else:
+            all_users.append(new_user)
+            with open("MoviWeb/movies.json", "w") as save_file:
+                json_file = json.dumps(all_users)
+                save_file.write(json_file)
+            return "User added successfully."
 
     def add_movie(self, user_id, title):
         """ Adds a movie to the user movie list and saves it."""

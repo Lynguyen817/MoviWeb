@@ -42,9 +42,9 @@ def add_user():
         new_user_id = str(uuid.uuid4())
         # Add the new user to the data manager
         data_manager.add_user(new_user_id, username)
-        return redirect(url_for('users'))
+        return redirect(url_for('list_users'))
     # Else, it's GET method
-    return render_template('add.html')
+    return render_template('add_user.html')
 
 
 @app.route('/users/<user_id>/add_movie', methods=['GET', 'POST'])
