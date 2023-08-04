@@ -57,29 +57,29 @@ class JSONDataManager(DataManagerInterface):
     def add_movie(self, user_id, title):
         """ Adds a movie to the user movie list and saves it."""
         list_of_users = self.get_all_users()
-        exist_movie_list = self.get_user_movies()
         for user in list_of_users:
             if user["id"] == user_id:
-                for movie in exist_movie_list:
-                    # Get a new movie from API
-                    new_movie_api = self.load_movies_data(title)
-                    if movie["name"] != title:
-                        # Generate a unique identifier for the new movie
-                        new_movie_id = len(exist_movie_list) + 1
-                        new_movie_data = {
-                                "id": new_movie_id,
-                                "name": new_movie_api["Title"],
-                                "director": new_movie_api["Director"],
-                                "year": new_movie_api["Year"],
-                                "rating": new_movie_api["imdbRating"],
-                                "image": new_movie_api["Poster"]
-                            }
-                        new_dict = {**exist_movie_list, **new_movie_data}
+                # Get a new movie from API
+                new_movie_api = self.load_movies_data(title)
+                # Generate a unique identifier for the new movie
+                new_movie_id = len(user["movies"]) + 1
 
-                        with open("movies.json", "w") as save_file:
-                            json_file = json.dumps(new_dict)
-                            saved_movies = save_file.write(json_file)
-                        return saved_movies
+                new_movie_data = {
+                        "id": new_movie_id,
+                        "name": new_movie_api["Title"],
+                        "director": new_movie_api["Director"],
+                        "year": new_movie_api["Year"],
+                        "rating": new_movie_api["imdbRating"],
+                        "image": new_movie_api["Poster"]
+                }
+
+                user["movies"].append(new_movie_data)
+                break
+
+        with open("movies.json", "w") as save_file:
+            json_file = json.dumps(list_of_users)
+            save_file.write(json_file)
+        return list_of_users
 
     def delete_movie(self, user_id,  title):
         """Deletes a movie from the movies database"""

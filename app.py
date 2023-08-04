@@ -1,6 +1,7 @@
-from flask import Flask, jsonify, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for
 from datamanager.json_data_manager import JSONDataManager
 import uuid
+import json
 
 app = Flask(__name__)
 data_manager = JSONDataManager('movies.json')
@@ -18,7 +19,6 @@ def home():
 def list_users():
     """Returns a list of users."""
     users = data_manager.get_all_users()
-    #return jsonify(users)
     return render_template('users.html', users=users)
 
 
@@ -26,7 +26,6 @@ def list_users():
 def user_movies(user_id):
     """Return a list of movies for a given user_id."""
     list_of_users_movies = data_manager.get_user_movies(user_id)
-    #return jsonify(list_of_users_movies)
     return render_template('user_movies.html', user_id=user_id, list_of_users_movies=list_of_users_movies)
 
 
@@ -50,18 +49,22 @@ def add_user():
 @app.route('/users/<user_id>/add_movie', methods=['GET', 'POST'])
 def add_movie(user_id):
     """Adds a new movie to a user's favorite movies list."""
-    favorite_movies = data_manager.add_movie(user_id)
     if request.method == 'POST':
         movie_title = request.form.get('title')
-        # Check if the user already has a list of favorite movies
+        favorite_movies = data_manager.add_movie(user_id, movie_title)
+        # Update the favorite_movies list and save the changes
         if user_id in favorite_movies:
             favorite_movies[user_id].append(movie_title)
         else:
             favorite_movies[user_id] = [movie_title]
 
+        with open("movies.json", "w") as save_file:
+            json_file = json.dumps(favorite_movies)
+            save_file.write(json_file)
+
         return f"Movie '{movie_title}' added to user {user_id}'s favorite movies."
     # It's GET method
-    return render_template('users.html', user_id=user_id)
+    return render_template('add_movie.html', user_id=user_id)
 
 
 # @app.route('/users/<user_id>/delete_movie/<movie_id>', method=['DELETE'])

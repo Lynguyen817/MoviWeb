@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Movie</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Add Movie to Favorite List</h1>
+    <form method="post" action="/users/{{ user_id }}/add_movie">
+        <label for="title">Movie Title:</label>
+        <input type="text" id="title" name="title" required>
+        <input type="submit" value="Add Movie">
+    </form>
+</body>
+</html>

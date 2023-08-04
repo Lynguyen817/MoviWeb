@@ -26,15 +26,14 @@
         <button>
             <a href="/add_user">Add a User</a>
         </button>
-        <button>
-            <a href="/add_user">Start a watchlist</a>
-        </button>
     </div>
 
         <h2><a href="/users">Users</a></h2>
         <ul>
             {% for user in users %}
-                <li>{{ user.name }} - <a href="/users/{{ user.id }}/movies">Favorite Movies</a>
+                <li>{{ user.name }} <br>
+                    <a href="/users/{{ user.id }}/movies">Favorite Movies</a> <br>
+                    <a href="/users/{{ user.id }}/add_movie">Add Movie</a>
                 </li>
             {% endfor %}
         </ul>
