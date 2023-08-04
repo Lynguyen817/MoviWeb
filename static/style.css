@@ -2,7 +2,7 @@
     --heading-font-family: 'Kanit', sans-serif;
     --default-font-family: 'Libre Franklin', sans-serif;
     --background-color: linear-gradient(blue, pink);
-    --background-image: url(/static/background_image.jpg);
+    --background-image: url(.../static/background_image.jpg);
 }
 
 body {

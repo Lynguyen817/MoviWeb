@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" media="screen" href = "{{ url_for('static', filename='bootstrap.min.css') }}">
     <title>Add New User</title>
-    <script>
-        a {text-decoration:none}
-    </script>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <h1>Create an Account</h1>
@@ -30,9 +29,7 @@
             </div>
         </div>
         <br>
-        <button>
-            <a href="/add_user">Add User</a>
-        </button>
+        <input type="submit" value="Add User"
     </form>
 </body>
 </html>

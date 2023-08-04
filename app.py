@@ -33,23 +33,15 @@ def user_movies(user_id):
 @app.route('/add_user', methods=['GET', 'POST'])
 def add_user():
     """Get a new user."""
-    users = data_manager.add_user()
-    #return users
-    add_new_user = []
     if request.method == 'POST':
         # Get user input from the form
         username = request.form.get('username')
         email = request.form.get('email')
         password = request.form.get('password')
         # Generate a unique identifier for a new user
-        new_user_id = uuid.uuid4()
-        # Create a new user dictionary
-        new_user = {
-            'id': new_user_id,
-            'name': username,
-            'movie': []
-        }
-        add_new_user.append(new_user)
+        new_user_id = str(uuid.uuid4())
+        # Add the new user to the data manager
+        data_manager.add_user(new_user_id, username)
         return redirect(url_for('users'))
     # Else, it's GET method
     return render_template('add.html')
