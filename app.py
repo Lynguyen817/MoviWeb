@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
 from datamanager.json_data_manager import JSONDataManager
+from flask_bootstrap import Bootstrap
 import uuid
 import json
 
 app = Flask(__name__)
+bootstrap = Bootstrap(app)
 data_manager = JSONDataManager('movies.json')
 
 
