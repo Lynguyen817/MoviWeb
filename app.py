@@ -1,7 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, jsonify, render_template, request, redirect, url_for
 from datamanager.json_data_manager import JSONDataManager
 from flask_bootstrap import Bootstrap
-#import uuid
 import json
 
 app = Flask(__name__)
@@ -40,6 +39,8 @@ def list_users():
 def user_movies(user_id):
     """Return a list of movies for a given user_id."""
     list_of_users_movies = data_manager.get_user_movies(user_id)
+    if list_of_users_movies is None:
+        return "User not found", 404
     return render_template('user_movies.html', user_id=user_id, list_of_users_movies=list_of_users_movies)
 
 

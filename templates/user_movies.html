@@ -11,8 +11,7 @@
         <ul>
             {% for movie in list_of_users_movies %}
                 <li>
-                    {{ movie }}
-                    <strong>{{name}}</strong> <br>
+                    <strong>{{ movie.name }}</strong><br>
                     <em>Director: {{ movie.director}}</em><br>
                     <em>Year: {{ movie.year}}</em><br>
                     <em>Rating: {{ movie.rating}}</em><br>
