@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from datamanager.json_data_manager import JSONDataManager
 from flask_bootstrap import Bootstrap
-import uuid
+#import uuid
 import json
 
 app = Flask(__name__)
@@ -11,10 +11,22 @@ data_manager = JSONDataManager('movies.json')
 
 @app.route('/')
 def home():
+    """Returns homepage, alerts error when it's not open."""
     try:
         return render_template("users.html")
     except Exception as e:
         return str(e)
+
+
+@app.route('/search_movie')
+def search_movie():
+    """Return a movie that the user searches."""
+    title = request.args.get('title')
+    if not title:
+        return "Please provide a movie title.", 404
+
+    movie_data = data_manager.load_movies_data(title)
+    return render_template('users.html', users=movie_data)
 
 
 @app.route('/users')
@@ -34,13 +46,14 @@ def user_movies(user_id):
 @app.route('/add_user', methods=['GET', 'POST'])
 def add_user():
     """Get a new user."""
+    users = data_manager.get_all_users()
     if request.method == 'POST':
         # Get user input from the form
         username = request.form.get('username')
         email = request.form.get('email')
         password = request.form.get('password')
         # Generate a unique identifier for a new user
-        new_user_id = str(uuid.uuid4())
+        new_user_id = len(users) + 1
         # Add the new user to the data manager
         data_manager.add_user(new_user_id, username)
         return redirect(url_for('list_users'))
@@ -51,9 +64,13 @@ def add_user():
 @app.route('/users/<user_id>/add_movie', methods=['GET', 'POST'])
 def add_movie(user_id):
     """Adds a new movie to a user's favorite movies list."""
+    favorite_movies = data_manager.get_user_movies(user_id)
+
     if request.method == 'POST':
         movie_title = request.form.get('title')
-        favorite_movies = data_manager.add_movie(user_id, movie_title)
+        #favorite_movies = data_manager.add_movie(user_id, movie_title)
+        if not movie_title:
+            return "Please provide a movie title.", 400
         # Update the favorite_movies list and save the changes
         if user_id in favorite_movies:
             favorite_movies[user_id].append(movie_title)

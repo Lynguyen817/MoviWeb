@@ -14,6 +14,7 @@ class JSONDataManager(DataManagerInterface):
         API_MOVIE_URL = f"http://www.omdbapi.com/?t={title}&apikey={API_KEY}"
         res = requests.get(API_MOVIE_URL)
         movies_data = json.loads(res.text)
+        #print(movies_data)
         return movies_data
 
     def get_all_users(self):
@@ -27,13 +28,13 @@ class JSONDataManager(DataManagerInterface):
         """ Return all the movies for a given user."""
         user_favorite_movies = []
         for user in self.get_all_users():
-            if user['id'] == int(user_id.strip("<>")):
+            if user['id'] == str(user_id.strip("<>")):
                 user_favorite_movies.append(user['movies'])
                 return user_favorite_movies
         return "User not found", 404
 
     def add_user(self, user_id, name):
-        """ Add a new user and save it to the database.."""
+        """ Add a new user and save it to the database."""
         all_users = self.get_all_users()
         user_exists = False
 
@@ -42,12 +43,12 @@ class JSONDataManager(DataManagerInterface):
                 user_exists = True
                 break
 
-        new_user = {"id": user_id,
-                    "name": name,
-                    "movies": []}
         if user_exists:
             return "User already exists."
         else:
+            new_user = {"id": user_id,
+                        "name": name,
+                        "movies": []}
             all_users.append(new_user)
             with open("MoviWeb/movies.json", "w") as save_file:
                 json_file = json.dumps(all_users)

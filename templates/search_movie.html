@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Movie Search Results</title>
+</head>
+<body>
+    <h1>Movie Search Results</h1>
+        {% if users %}
+            <img src="{{ users['Poster'] }}" alt="{{ users['Title'] }} Poster">
+            <ul>
+                <li><strong>Title:</strong> {{ users['Title'] }}</li>
+                <li><strong>Director:</strong> {{ users['Director'] }}</li>
+                <li><strong>Year:</strong> {{ users['Year'] }}</li>
+                <li><strong>Rating:</strong> {{ users['imdbRating'] }}</li>
+            </ul>
+        {% else %}
+            <p>No movie data found for the provided title.</p>
+        {% endif %}
+</body>
+</html>
