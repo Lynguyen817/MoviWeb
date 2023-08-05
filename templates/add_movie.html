@@ -5,13 +5,11 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Add Movie to Favorite List</h1>
-    <form method="post" action="/users/{{ user_id }}/add_movie">
+    <h1>Add a New Movie to Favorite List</h1>
+    <form method="post" action="{{ url_for('add_movie', user_id=user_id) }}">
         <label for="title">Movie Title:</label>
         <input type="text" id="title" name="title" required>
-        <button>
-            <a href="/add_user" class="btn btn-primary" tabindex="-1" role="button" aria-disabled="true">Add Movie</a>
-        </button>
+        <input type="submit" value="Add Movie">
     </form>
 </body>
 </html>

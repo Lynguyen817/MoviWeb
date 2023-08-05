@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 
 class DataManagerInterface(ABC):
-
+    """Create an interface."""
     @abstractmethod
     def get_all_users(self):
         pass

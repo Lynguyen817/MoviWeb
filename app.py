@@ -21,11 +21,14 @@ def home():
 def search_movie():
     """Return a movie that the user searches."""
     title = request.args.get('title')
-    if not title:
-        return "Please provide a movie title.", 404
+    # if not title:
+    #     return "Please provide a movie title.", 400
 
     movie_data = data_manager.load_movies_data(title)
-    return render_template('users.html', users=movie_data)
+    if movie_data.get('Response') == 'False':
+        return "Movie not found", 404
+
+    return render_template('search_movie.html', movie_data=movie_data)
 
 
 @app.route('/users')
@@ -49,15 +52,19 @@ def add_user():
     """Get a new user."""
     users = data_manager.get_all_users()
     if request.method == 'POST':
+
         # Get user input from the form
         username = request.form.get('username')
         email = request.form.get('email')
         password = request.form.get('password')
+
         # Generate a unique identifier for a new user
         new_user_id = len(users) + 1
+
         # Add the new user to the data manager
         data_manager.add_user(new_user_id, username)
         return redirect(url_for('list_users'))
+
     # Else, it's GET method
     return render_template('add_user.html')
 
@@ -65,24 +72,20 @@ def add_user():
 @app.route('/users/<user_id>/add_movie', methods=['GET', 'POST'])
 def add_movie(user_id):
     """Adds a new movie to a user's favorite movies list."""
-    favorite_movies = data_manager.get_user_movies(user_id)
+    #favorite_movies = data_manager.get_user_movies(user_id)
 
     if request.method == 'POST':
         movie_title = request.form.get('title')
-        #favorite_movies = data_manager.add_movie(user_id, movie_title)
+
         if not movie_title:
             return "Please provide a movie title.", 400
-        # Update the favorite_movies list and save the changes
-        if user_id in favorite_movies:
-            favorite_movies[user_id].append(movie_title)
-        else:
-            favorite_movies[user_id] = [movie_title]
 
-        with open("movies.json", "w") as save_file:
-            json_file = json.dumps(favorite_movies)
-            save_file.write(json_file)
+        # Call the add_movie method of the data_manager to add the movie to the user's list
+        result_message = data_manager.add_movie(user_id, movie_title)
 
-        return f"Movie '{movie_title}' added to user {user_id}'s favorite movies."
+        return result_message
+            #redirect(url_for('user_movies', user_id=user_id))
+
     # It's GET method
     return render_template('add_movie.html', user_id=user_id)
 

@@ -31,9 +31,11 @@ a {
     font-weight: 600px;
     text-align: left;
     }
+
 h1 {
     font-family: var(--heading-font-family);
     }
+
 h2 {
     color: blue;
     font-family: var(--heading-font-family);

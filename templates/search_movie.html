@@ -5,16 +5,17 @@
 </head>
 <body>
     <h1>Movie Search Results</h1>
-        {% if users %}
-            <img src="{{ users['Poster'] }}" alt="{{ users['Title'] }} Poster">
+        {% if movie_data.Response == "True"  %}
+            <img src="{{ movie_data['Poster'] }}" alt="{{ movie_data['Title'] }} Poster">
             <ul>
-                <li><strong>Title:</strong> {{ users['Title'] }}</li>
-                <li><strong>Director:</strong> {{ users['Director'] }}</li>
-                <li><strong>Year:</strong> {{ users['Year'] }}</li>
-                <li><strong>Rating:</strong> {{ users['imdbRating'] }}</li>
+                <li><strong>Title:</strong> {{ movie_data['Title'] }}</li>
+                <li><strong>Director:</strong> {{ movie_data['Director'] }}</li>
+                <li><strong>Year:</strong> {{ movie_data['Year'] }}</li>
+                <li><strong>Rating:</strong> {{ movie_data['imdbRating'] }}</li>
             </ul>
         {% else %}
-            <p>No movie data found for the provided title.</p>
+            <p>No movie data found for the provided title.
+                {{ movie_data.Error }}</p>
         {% endif %}
 </body>
 </html>
