@@ -51,8 +51,7 @@ def user_movies(user_id):
     if new_movies_list:
         list_of_users_movies.append(new_movies_list)
 
-    return render_template('user_movies.html', user_id=user_id, list_of_users_movies=list_of_users_movies,
-                           new_movies_list=new_movies_list)
+    return render_template('user_movies.html', user_id=user_id, list_of_users_movies=list_of_users_movies)
 
 
 @app.route('/add_user', methods=['GET', 'POST'])
@@ -87,11 +86,10 @@ def add_movie(user_id):
             return "Please provide a movie title.", 400
 
         # Call the add_movie method of the data_manager to add the movie to the user's list
-        updated_user = data_manager.add_movie(user_id, movie_title)
-        print(updated_user)
+        new_movie_list = data_manager.add_movie(user_id, movie_title)
+        print(new_movie_list)
 
-        if updated_user is not None:
-            new_movie_list = updated_user["movies"]
+        if new_movie_list is not None:
             return redirect(url_for('user_movies', user_id=user_id, new_movie_list=new_movie_list))
         else:
             return "User not found"
@@ -100,41 +98,36 @@ def add_movie(user_id):
     return render_template('add_movie.html', user_id=user_id)
 
 
-# @app.route('/users/<user_id>/delete_movie/<movie_id>', method=['DELETE'])
-# def delete_movie(user_id, movie_id):
-#     """ Delete a movie with given user_id."""
-#     users = list_users()
-#     if user_id in users:
-#         movies = users[user_id]['movies']
-#         if movie_id in movies:
-#             movies.remove(movie_id)
-#             return jsonify({'message':f'Movie {movie_id} deleted from user {user_id} favorite list.'})
-#         else:
-#             return jsonify({'error': f'Movie {movie_id} not found in user {user_id} favorite list.'}), 404
-#     else:
-#         return jsonify({'error': f'User {user_id} not found.'}), 404
+@app.route('/users/<user_id>/delete_movie/<movie_id>', methods=['POST'])
+def delete_movie(user_id, movie_id):
+    """ Delete a movie from the user's favorite movie list"""
+    data_manager.delete_movie(user_id, movie_id)
+    return render_template('delete_movie.html', user_id=user_id, movie_id=movie_id)
 
 
 @app.route('/users/<user_id>/update_movie/<movie_id>', methods=['GET', 'POST'])
 def update_movie(user_id, movie_id):
-    movies = user_movies()
+    """Update a movie in the user's movie list"""
+    movie_to_update = None
     if request.method == 'POST':
-        # Get the updated movie details from the form
-        updated_title = request.form['title']
-        updated_genre = request.form['genre']
-        updated_rating = request.form['rating']
+        # Update movie details
+        movie_to_update["name"] = request.form.get('name')
+        movie_to_update["director"] = request.form.get('director')
+        movie_to_update["year"] = request.form.get('year')
+        movie_to_update["rating"] = request.form.get('rating')
+        movie_to_update["image"] = request.form.get('image')
 
         # Redirect to the user's movie list
-        return redirect(f'/users/{user_id}/movies')
+        return redirect(url_for('user_movies', user_id=user_id))
 
     # Render the movie update form
-    return render_template('update_movie.html', movie=movies)
+    return render_template('update_movie.html',user_id=user_id, movie=movie_to_update)
 
-# def find_user_by_id(users, id):
-#   for user in users:
-#     if user['id'] == id:
-#       return user
-#   return None
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
 
 if __name__ == '__main__':
     app.run(debug=True)

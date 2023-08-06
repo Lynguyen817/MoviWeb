@@ -6,8 +6,10 @@
 <body>
     <h1>Delete Movie</h1>
     <p>Are you sure you want to delete "{{ movie }}"?</p>
-    <form method="post">
+    <form method="post" action="{{ url_for('delete_movie', user_id=user_id, movie_id=movie_id) }}">
+        <input type="hidden" name="_method" value="POST">
         <input type="submit" value="Delete">
+        <a href="{{ url_for('user_movies', user_id=user_id) }}">Cancel</a>
     </form>
 </body>
 </html>

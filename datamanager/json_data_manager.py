@@ -62,7 +62,7 @@ class JSONDataManager(DataManagerInterface):
                 new_movie_from_api = self.load_movies_data(movie_title)
 
                 if new_movie_from_api.get("Response") == "False":
-                    return "Movie not found"
+                    return None
 
                 new_movie_id = len(user["movies"]) + 1
 
@@ -80,35 +80,39 @@ class JSONDataManager(DataManagerInterface):
                 with open("movies.json", "w") as save_file:
                     json_file = json.dumps(list_of_users)
                     save_file.write(json_file)
-                return user
-        return "User not found"
+                return user["movies"]
+        return None
 
-    def delete_movie(self, user_id,  title):
+    def delete_movie(self, user_id,  movie_id):
         """Deletes a movie from the movies database"""
         list_of_users = self.get_all_users()
-        exist_movie_list = self.get_user_movies()
-        #exist_movies_data = self.list_movies()
         for user in list_of_users:
-            if user["id"] == user_id:
-                for movie in exist_movie_list:
-                    if movie["name"] == title:
-                        del (exist_movie_list[title])
-        with open("data.json", "w") as save_file:
-            json.dump(exist_movie_list, save_file)
-        return
+            if user["id"] == int(user_id.strip("<>")):
+                for movie in user["movies"]:
+                    if movie["id"] == int(movie_id.strip("<>")):
+                        user["movies"].remove(movie)
+                        break
 
-    def update_movie(self, user_id, title, new_rating):
+                # Save the updated user data to the JSON file
+                with open("movies.json", "w") as save_file:
+                    json_file = json.dumps(list_of_users)
+                    save_file.write(json_file)
+                return
+        return "User not found"
+
+    def update_movie(self, user_id, movie_id, new_rating):
         """Updates a movie from the movies database with a new rating"""
         list_of_users = self.get_all_users()
-        exist_movie_list = self.get_user_movies()
         for user in list_of_users:
-            if user["id"] == user_id:
-                for movie in exist_movie_list:
-                    if movie["name"] == title:
-        #movies_data = self.list_movies()
+            if user["id"] == int(user_id.strip("<>")):
+                for movie in user["movies"]:
+                    if movie["id"] == int(movie_id.strip("<>")):
                         for key, val in movie.items():
-                            if title == key:
+                            if movie_id == key:
                                 val["rating"] = new_rating
-        with open("movies.json", "w") as save_file:
-            json.dump(exist_movie_list, save_file)
-            return exist_movie_list
+                                # Save the updated user data to the JSON file
+                with open("movies.json", "w") as save_file:
+                    json_file = json.dumps(list_of_users)
+                    save_file.write(json_file)
+                return
+        return "User not found"
