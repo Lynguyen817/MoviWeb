@@ -42,9 +42,17 @@ def list_users():
 def user_movies(user_id):
     """Return a list of movies for a given user_id."""
     list_of_users_movies = data_manager.get_user_movies(user_id)
+    # Check if the list_of_users_movies is None, and if so, set it to an empty list
     if list_of_users_movies is None:
-        return "User not found", 404
-    return render_template('user_movies.html', user_id=user_id, list_of_users_movies=list_of_users_movies)
+        list_of_users_movies = []
+
+    # Retrieve the new_movie_list from the query parameters if it exists
+    new_movies_list = request.args.get('new_movie_list', None)
+    if new_movies_list:
+        list_of_users_movies.append(new_movies_list)
+
+    return render_template('user_movies.html', user_id=user_id, list_of_users_movies=list_of_users_movies,
+                           new_movies_list=new_movies_list)
 
 
 @app.route('/add_user', methods=['GET', 'POST'])
@@ -72,8 +80,6 @@ def add_user():
 @app.route('/users/<user_id>/add_movie', methods=['GET', 'POST'])
 def add_movie(user_id):
     """Adds a new movie to a user's favorite movies list."""
-    #favorite_movies = data_manager.get_user_movies(user_id)
-
     if request.method == 'POST':
         movie_title = request.form.get('title')
 
@@ -81,10 +87,14 @@ def add_movie(user_id):
             return "Please provide a movie title.", 400
 
         # Call the add_movie method of the data_manager to add the movie to the user's list
-        result_message = data_manager.add_movie(user_id, movie_title)
+        updated_user = data_manager.add_movie(user_id, movie_title)
+        print(updated_user)
 
-        return result_message
-            #redirect(url_for('user_movies', user_id=user_id))
+        if updated_user is not None:
+            new_movie_list = updated_user["movies"]
+            return redirect(url_for('user_movies', user_id=user_id, new_movie_list=new_movie_list))
+        else:
+            return "User not found"
 
     # It's GET method
     return render_template('add_movie.html', user_id=user_id)

@@ -12,6 +12,7 @@
             {% for movie in list_of_users_movies %}
                 <li>
                     <strong>{{ movie.name }}</strong><br>
+                    <img src="{{ movie.image }}" alt="{{ movie.name }}">
                     <em>Director: {{ movie.director}}</em><br>
                     <em>Year: {{ movie.year}}</em><br>
                     <em>Rating: {{ movie.rating}}</em><br>
@@ -23,6 +24,7 @@
     {% else %}
         <p>No movies found for this user.</p>
     {% endif %}
+
 
      </div>
 </body>

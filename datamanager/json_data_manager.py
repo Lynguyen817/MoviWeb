@@ -53,13 +53,13 @@ class JSONDataManager(DataManagerInterface):
                 save_file.write(json_file)
             return "User added successfully."
 
-    def add_movie(self, user_id, movie_data):
+    def add_movie(self, user_id, movie_title):
         """ Adds a movie to the user movie list and saves it."""
         list_of_users = self.get_all_users()
         for user in list_of_users:
             if user["id"] == int(user_id.strip("<>")):
                 # Get a new movie from API
-                new_movie_from_api = self.load_movies_data(movie_data)
+                new_movie_from_api = self.load_movies_data(movie_title)
 
                 if new_movie_from_api.get("Response") == "False":
                     return "Movie not found"
@@ -80,7 +80,7 @@ class JSONDataManager(DataManagerInterface):
                 with open("movies.json", "w") as save_file:
                     json_file = json.dumps(list_of_users)
                     save_file.write(json_file)
-                return "Movie added successfully"
+                return user
         return "User not found"
 
     def delete_movie(self, user_id,  title):
