@@ -39,21 +39,21 @@ def list_users():
 @app.route('/users/<user_id>/movies')
 def user_movies(user_id):
     """Return a list of movies for a given user_id."""
-    list_of_users_movies = data_manager.get_user_movies(user_id)
+    list_of_user_movies = data_manager.get_user_movies(user_id)
     # Check if the list_of_users_movies is None, and if so, set it to an empty list
-    if list_of_users_movies is None:
-        list_of_users_movies = []
+    if list_of_user_movies is None:
+        list_of_user_movies = []
 
     # Retrieve the new_movie_list from the query parameters if it exists
     new_movies_list = request.args.get('new_movie_list', None)
     if new_movies_list:
         # Convert the new_movies_list from JSON string to a Python list
        # new_movies_list = json.loads(new_movies_list)
-        list_of_users_movies.append(new_movies_list)
+        list_of_user_movies.append(new_movies_list)
         # Redirect to the user_movies route with the new_movie_data as a query parameter
         #return redirect(url_for('user_movies', user_id=user_id, new_movie_list=json.dumps(new_movie_data)))
 
-    return render_template('user_movies.html', user_id=user_id, list_of_users_movies=list_of_users_movies)
+    return render_template('user_movies.html', user_id=user_id, list_of_user_movies=list_of_user_movies)
 
 
 @app.route('/add_user', methods=['GET', 'POST'])

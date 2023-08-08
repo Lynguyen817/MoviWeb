@@ -6,9 +6,9 @@
 </head>
 <body class="movies-list">
     <h1>Favorite Movies</h1>
-    {% if list_of_users_movies %}
+    {% if list_of_user_movies %}
         <ul>
-            {% for movie in list_of_users_movies %}
+            {% for movie in list_of_user_movies %}
                 <li>
                     <strong class="movie-name">{{ movie.name }}</strong><br>
                     <img src="{{ movie.image }}" alt="{{ movie.name }}"><br>
