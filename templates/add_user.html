@@ -29,7 +29,8 @@
             </div>
         </div>
         <br>
-        <button type="submit" class="btn btn-primary" tabindex="-1" role="button" aria-disabled="true"> Add User</button>
+        <button type="submit" class="btn btn-primary"> Add User</button>
+        <button><a href ="{{ url_for('list_users', user_id=user_id) }}" class="btn btn-secondary">Cancel</a></button>
     </form>
 </body>
 </html>
