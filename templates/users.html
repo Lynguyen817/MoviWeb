@@ -10,8 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Kanit&family=Libre+Franklin:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
 </head>
-<body>
-    <div class="container">
+<body class="homepage">
+
         <nav class="navbar bg-body-tertiary">
           <div class="container-fluid">
             <form class="d-flex" role="search">
@@ -22,9 +22,7 @@
         </nav>
 
         <h1> Welcome to User Movie App</h1>
-        <div>
             <a href="/add_user" class="btn btn-primary" tabindex="-1" role="button" aria-disabled="true">Add a User</a>
-        </div>
             <h2><a href="/users">Users</a></h2>
             <ul>
                 {% for user in users %}
@@ -34,9 +32,6 @@
                     </li>
                 {% endfor %}
             </ul>
-    </div>
-    <div class="search_movie">
-        <!--A searched movie will be inserted here-->
-    </div>
+
 </body>
 </html>

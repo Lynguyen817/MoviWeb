@@ -7,7 +7,7 @@
     <title>Add New User</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
-<body>
+<body class="add-user">
     <h1>Create an Account</h1>
     <form action="/add_user" method="POST">
         <div class="mb-3 row">
@@ -29,7 +29,7 @@
             </div>
         </div>
         <br>
-        <input type="submit" value="Add User">
+        <button type="submit" class="btn btn-primary" tabindex="-1" role="button" aria-disabled="true"> Add User</button>
     </form>
 </body>
 </html>

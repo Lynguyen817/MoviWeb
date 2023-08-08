@@ -4,7 +4,7 @@
     <title>Add Movie</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
-<body>
+<body class="add-movie">
     <h1>Add a New Movie to Favorite List</h1>
     <form method="post" action="{{ url_for('add_movie', user_id=user_id) }}">
         <label for="title">Movie Title:</label>

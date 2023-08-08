@@ -4,15 +4,14 @@
     <link rel="stylesheet" href="/static/style.css">
     <title>User - Favorite Movies</title>
 </head>
-<body>
-    <div class="movies_list">
+<body class="movies-list">
     <h1>Favorite Movies</h1>
     {% if list_of_users_movies %}
         <ul>
             {% for movie in list_of_users_movies %}
                 <li>
-                    <strong>{{ movie.name }}</strong><br>
-                    <img src="{{ movie.image }}" alt="{{ movie.name }}">
+                    <strong class="movie-name">{{ movie.name }}</strong><br>
+                    <img src="{{ movie.image }}" alt="{{ movie.name }}"><br>
                     <em>Director: {{ movie.director}}</em><br>
                     <em>Year: {{ movie.year}}</em><br>
                     <em>Rating: {{ movie.rating}}</em><br>
@@ -24,9 +23,6 @@
     {% else %}
         <p>No movies found for this user.</p>
     {% endif %}
-
-
-     </div>
 </body>
 </html>
 
