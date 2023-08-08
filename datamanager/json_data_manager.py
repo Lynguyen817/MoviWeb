@@ -80,27 +80,33 @@ class JSONDataManager(DataManagerInterface):
                 with open("movies.json", "w") as save_file:
                     json_file = json.dumps(list_of_users)
                     save_file.write(json_file)
+
                 return user["movies"]
         return None
 
-    def delete_movie(self, user_id,  movie_id):
-        """Deletes a movie from the movies database"""
+    def delete_movie(self, user_id, movie_id):
+        """Deletes a movie from the user's movies list"""
         list_of_users = self.get_all_users()
         for user in list_of_users:
             if user["id"] == int(user_id.strip("<>")):
+                movie_to_remove = None
                 for movie in user["movies"]:
-                    if movie["id"] == int(movie_id.strip("<>")):
-                        user["movies"].remove(movie)
+                    print(movie)
+                    if movie["id"] == int(movie_id):
+                        movie_to_remove = movie
                         break
 
-                # Save the updated user data to the JSON file
-                with open("movies.json", "w") as save_file:
-                    json_file = json.dumps(list_of_users)
-                    save_file.write(json_file)
-                return
+                if movie_to_remove:
+                    user["movies"].remove(movie_to_remove)
+
+                    # Save the updated user data to the JSON file
+                    with open("movies.json", "w") as save_file:
+                        json_file = json.dumps(list_of_users)
+                        save_file.write(json_file)
+                    return
         return "User not found"
 
-    def update_movie(self, user_id, movie_id, new_rating):
+    def update_movie(self, user_id, movie_id, new_director, new_year, new_rating):
         """Updates a movie from the movies database with a new rating"""
         list_of_users = self.get_all_users()
         for user in list_of_users:
@@ -109,7 +115,10 @@ class JSONDataManager(DataManagerInterface):
                     if movie["id"] == int(movie_id.strip("<>")):
                         for key, val in movie.items():
                             if movie_id == key:
+                                val["director"] = new_director
+                                val["year"] = new_year
                                 val["rating"] = new_rating
+
                                 # Save the updated user data to the JSON file
                 with open("movies.json", "w") as save_file:
                     json_file = json.dumps(list_of_users)

@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for
 from datamanager.json_data_manager import JSONDataManager
 from flask_bootstrap import Bootstrap
 import json
@@ -21,10 +21,8 @@ def home():
 def search_movie():
     """Return a movie that the user searches."""
     title = request.args.get('title')
-    # if not title:
-    #     return "Please provide a movie title.", 400
-
     movie_data = data_manager.load_movies_data(title)
+
     if movie_data.get('Response') == 'False':
         return "Movie not found", 404
 
@@ -49,7 +47,11 @@ def user_movies(user_id):
     # Retrieve the new_movie_list from the query parameters if it exists
     new_movies_list = request.args.get('new_movie_list', None)
     if new_movies_list:
+        # Convert the new_movies_list from JSON string to a Python list
+       # new_movies_list = json.loads(new_movies_list)
         list_of_users_movies.append(new_movies_list)
+        # Redirect to the user_movies route with the new_movie_data as a query parameter
+        #return redirect(url_for('user_movies', user_id=user_id, new_movie_list=json.dumps(new_movie_data)))
 
     return render_template('user_movies.html', user_id=user_id, list_of_users_movies=list_of_users_movies)
 
@@ -98,11 +100,25 @@ def add_movie(user_id):
     return render_template('add_movie.html', user_id=user_id)
 
 
-@app.route('/users/<user_id>/delete_movie/<movie_id>', methods=['POST'])
+@app.route('/users/<user_id>/delete_movie/<movie_id>', methods=['GET', 'POST'])
 def delete_movie(user_id, movie_id):
     """ Delete a movie from the user's favorite movie list"""
-    data_manager.delete_movie(user_id, movie_id)
-    return render_template('delete_movie.html', user_id=user_id, movie_id=movie_id)
+    if request.method == 'POST':
+        deleted = data_manager.delete_movie(user_id, movie_id)
+        if deleted:
+            return redirect(url_for('user_movies', user_id=user_id))
+        else:
+            return "Movie not found"
+
+    # Get the movie data
+    list_of_users_movies = data_manager.get_user_movies(user_id)
+    movie = next((m for m in list_of_users_movies if m["id"] == int(movie_id)), None)
+
+    if not movie:
+        return "Movie not found"
+
+    # It's a GET request, render the delete page
+    return render_template('delete_movie.html', user_id=user_id, movie_id=movie_id, movie=movie)
 
 
 @app.route('/users/<user_id>/update_movie/<movie_id>', methods=['GET', 'POST'])
