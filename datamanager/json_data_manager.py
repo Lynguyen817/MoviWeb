@@ -77,8 +77,8 @@ class JSONDataManager(DataManagerInterface):
 
                 user["movies"].append(new_movie_data)
 
-                with open("movies.json", "w") as save_file:
-                    json_file = json.dumps(list_of_users)
+                with open("MoviWeb/movies.json", "w") as save_file:
+                    json_file = json.dumps(list_of_users, indent=4)
                     save_file.write(json_file)
 
                 return user["movies"]
@@ -100,7 +100,7 @@ class JSONDataManager(DataManagerInterface):
                     user["movies"].remove(movie_to_remove)
 
                     # Save the updated user data to the JSON file
-                    with open("movies.json", "w") as save_file:
+                    with open("MoviWeb/movies.json", "w") as save_file:
                         json_file = json.dumps(list_of_users)
                         save_file.write(json_file)
                     return
@@ -120,7 +120,7 @@ class JSONDataManager(DataManagerInterface):
                                 val["rating"] = new_rating
 
                                 # Save the updated user data to the JSON file
-                with open("movies.json", "w") as save_file:
+                with open("MoviWeb/movies.json", "w") as save_file:
                     json_file = json.dumps(list_of_users)
                     save_file.write(json_file)
                 return
