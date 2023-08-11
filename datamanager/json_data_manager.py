@@ -93,8 +93,6 @@ class JSONDataManager(DataManagerInterface):
                 for movie in user["movies"]:
                     print(movie)
                     if movie["id"] == int(movie_id):
-                        # user["movies"].remove(movie)
-                        # print(user["movies"])
                         movie_to_remove = movie
                         break
 
