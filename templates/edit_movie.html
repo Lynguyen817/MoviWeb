@@ -4,12 +4,11 @@
     <title>Update Movie</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
-<body>
+<body class="edit-movie">
     <h1>Edit Movie</h1>
-    <form method="post">
+    <form method="post" action="{{ url_for('update_movie', user_id=user_id, movie_id=movie['id']) }}">
         <label for="name">Movie Name:</label>
-        <input type="text" name="movie" value="{{ movie.name }}" required>
-        <input type="submit" value="Save">
+        <input type="text" name="movie" value="{{ movie.name }}" required><br>
 
         <label for="director">Director:</label>
         <input type="text" name="director" value="{{ movie.director }}" required><br>
@@ -20,11 +19,9 @@
         <label for="rating">Rating:</label>
         <input type="text" name="rating" value="{{ movie.rating }}" required><br>
 
-        <label for="image">Image URL:</label>
-        <input type="text" name="image" value="{{ movie.image }}" required><br>
-
         <input type="submit" value="Update">
     </form>
+    <button><a href ="{{ url_for('list_users', user_id=user_id) }}" class="btn btn-secondary">Cancel</a></button>
 </body>
 </html>
 

@@ -93,15 +93,18 @@ class JSONDataManager(DataManagerInterface):
                 for movie in user["movies"]:
                     print(movie)
                     if movie["id"] == int(movie_id):
-                        movie_to_remove = movie
-                        break
-
-                if movie_to_remove:
-                    user["movies"].remove(movie_to_remove)
+                        user["movies"].remove(movie)
+                        print(user["movies"])
+                #         movie_to_remove = movie
+                #         break
+                #
+                # if movie_to_remove:
+                #     user["movies"].remove(movie_to_remove)
+                #     print(user["movies"])
 
                     # Save the updated user data to the JSON file
                     with open("MoviWeb/movies.json", "w") as save_file:
-                        json_file = json.dumps(list_of_users)
+                        json_file = json.dumps(list_of_users, indent=4)
                         save_file.write(json_file)
                     return
         return "User not found"
@@ -113,15 +116,13 @@ class JSONDataManager(DataManagerInterface):
             if user["id"] == int(user_id.strip("<>")):
                 for movie in user["movies"]:
                     if movie["id"] == int(movie_id.strip("<>")):
-                        for key, val in movie.items():
-                            if movie_id == key:
-                                val["director"] = new_director
-                                val["year"] = new_year
-                                val["rating"] = new_rating
+                        movie["director"] = new_director
+                        movie["year"] = new_year
+                        movie["rating"] = new_rating
 
-                                # Save the updated user data to the JSON file
+                # Save the updated user data to the JSON file
                 with open("MoviWeb/movies.json", "w") as save_file:
                     json_file = json.dumps(list_of_users)
                     save_file.write(json_file)
-                return
-        return "User not found"
+                return True
+        return False

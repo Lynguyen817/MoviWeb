@@ -43,6 +43,7 @@ h1 {
 h2 {
     color: blue;
     font-family: var(--heading-font-family);
+    font-size: 50px;
 }
 
 .list-movies-title {
@@ -53,13 +54,13 @@ h2 {
   font-size: 16pt;
 }
 
-.movies-list {
+.movies-list, .search-movie {
     background: black;
     background-size: cover;
     background-repeat: no-repeat;
 }
 
-.add-user, .add-movie {
+.add-user, .add-movie, .edit-movie {
     background: var(--background-color);
     background-size: cover;
     background-repeat: no-repeat;

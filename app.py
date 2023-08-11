@@ -47,11 +47,7 @@ def user_movies(user_id):
     # Retrieve the new_movie_list from the query parameters if it exists
     new_movies_list = request.args.get('new_movie_list', None)
     if new_movies_list:
-        # Convert the new_movies_list from JSON string to a Python list
-       # new_movies_list = json.loads(new_movies_list)
         list_of_user_movies.append(new_movies_list)
-        # Redirect to the user_movies route with the new_movie_data as a query parameter
-        #return redirect(url_for('user_movies', user_id=user_id, new_movie_list=json.dumps(new_movie_data)))
 
     return render_template('user_movies.html', user_id=user_id, list_of_user_movies=list_of_user_movies)
 
@@ -61,7 +57,6 @@ def add_user():
     """Get a new user."""
     users = data_manager.get_all_users()
     if request.method == 'POST':
-
         # Get user input from the form
         username = request.form.get('username')
         email = request.form.get('email')
@@ -111,8 +106,8 @@ def delete_movie(user_id, movie_id):
             return "Movie not found"
 
     # Get the movie data
-    list_of_users_movies = data_manager.get_user_movies(user_id)
-    movie = next((m for m in list_of_users_movies if m["id"] == int(movie_id)), None)
+    list_of_user_movies = data_manager.get_user_movies(user_id)
+    movie = next((m for m in list_of_user_movies if m["id"] == int(movie_id)), None)
 
     if not movie:
         return "Movie not found"
@@ -124,20 +119,25 @@ def delete_movie(user_id, movie_id):
 @app.route('/users/<user_id>/update_movie/<movie_id>', methods=['GET', 'POST'])
 def update_movie(user_id, movie_id):
     """Update a movie in the user's movie list"""
-    movie_to_update = None
     if request.method == 'POST':
-        # Update movie details
-        movie_to_update["name"] = request.form.get('name')
-        movie_to_update["director"] = request.form.get('director')
-        movie_to_update["year"] = request.form.get('year')
-        movie_to_update["rating"] = request.form.get('rating')
-        movie_to_update["image"] = request.form.get('image')
+        new_director = request.form.get('director')
+        new_year = request.form.get('year')
+        new_rating = request.form.get('rating')
+        updated = data_manager.update_movie(user_id, movie_id, new_director, new_year, new_rating)
+        if updated:
+            return redirect(url_for('user_movies', user_id=user_id))
+        else:
+            return "Movie not found"
 
-        # Redirect to the user's movie list
-        return redirect(url_for('user_movies', user_id=user_id))
+    # Get the movie data
+    list_of_users_movies = data_manager.get_user_movies(user_id.strip("<>"))
+    movie = next((m for m in list_of_users_movies if m["id"] == int(movie_id)), None)
+
+    if not movie:
+        return "Movie not found"
 
     # Render the movie update form
-    return render_template('update_movie.html',user_id=user_id, movie=movie_to_update)
+    return render_template('edit_movie.html', user_id=user_id, movie=movie)
 
 
 @app.errorhandler(404)
