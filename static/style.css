@@ -4,7 +4,6 @@
     --title-font-family: 'Josefin Sans', sans-serif;
     --background-color: linear-gradient(blue, pink);
     --background-image: url("../static/background_image.jpg");
-    --background-dark: url("../static/darktheme.jpg");
 }
 
 
@@ -64,6 +63,7 @@ h2 {
     background: var(--background-color);
     background-size: cover;
     background-repeat: no-repeat;
+    margin: 20px 30px 20px 30px;
 }
 
 .homepage, .delete-page {

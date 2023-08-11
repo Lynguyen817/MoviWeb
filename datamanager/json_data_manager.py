@@ -93,21 +93,21 @@ class JSONDataManager(DataManagerInterface):
                 for movie in user["movies"]:
                     print(movie)
                     if movie["id"] == int(movie_id):
-                        user["movies"].remove(movie)
-                        print(user["movies"])
-                #         movie_to_remove = movie
-                #         break
-                #
-                # if movie_to_remove:
-                #     user["movies"].remove(movie_to_remove)
-                #     print(user["movies"])
+                        # user["movies"].remove(movie)
+                        # print(user["movies"])
+                        movie_to_remove = movie
+                        break
 
-                    # Save the updated user data to the JSON file
-                    with open("MoviWeb/movies.json", "w") as save_file:
-                        json_file = json.dumps(list_of_users, indent=4)
-                        save_file.write(json_file)
-                    return
-        return "User not found"
+                if movie_to_remove:
+                    user["movies"].remove(movie_to_remove)
+                    print(user["movies"])
+
+                # Save the updated user data to the JSON file
+                with open("MoviWeb/movies.json", "w") as save_file:
+                    json_file = json.dumps(list_of_users, indent=4)
+                    save_file.write(json_file)
+                return True
+        return False
 
     def update_movie(self, user_id, movie_id, new_director, new_year, new_rating):
         """Updates a movie from the movies database with a new rating"""
