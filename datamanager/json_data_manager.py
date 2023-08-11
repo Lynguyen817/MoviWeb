@@ -65,7 +65,7 @@ class JSONDataManager(DataManagerInterface):
         for user in list_of_users:
             if user["id"] == int(user_id.strip("<>")):
                 # Get a new movie from API
-                new_movie_from_api = load_movies_data(movie_title)
+                new_movie_from_api = self.load_movies_data(movie_title)
 
                 if new_movie_from_api.get("Response") == "False":
                     return None

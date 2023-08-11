@@ -11,7 +11,7 @@
     {% if list_of_user_movies %}
         <ul class="row row-cols-3 text-center">
             {% for movie in list_of_user_movies %}
-                <li>
+                <li class="movie-info">
                     <strong class="movie-name">{{ movie.name }}</strong><br>
                     <img src="{{ movie.image }}" alt="{{ movie.name }}"><br>
                     <em>Director: {{ movie.director}}</em><br>

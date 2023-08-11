@@ -97,6 +97,12 @@ h2 {
   margin: auto;
 }
 
+.movie-info {
+    color: Pink;
+    font-size: 15px;
+    font-family: var(--default-font-family);
+}
+
 .movie-name {
     color: Pink;
     font-size: 30px;
