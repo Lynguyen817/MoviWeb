@@ -6,10 +6,11 @@
     <title>Movie Search Results</title>
 </head>
 <body class="search-movie">
+    <p><a href="{{ '/users' }}"><--Back to Home Page</a></p>
     <h1>Movie Search Results</h1>
         {% if movie_data.Response == "True"  %}
             <ul>
-                <li><strong>{{ movie_data['Title'] }}</strong></li>
+                <h2><strong>{{ movie_data['Title'] }}</strong></h2>
                 <li><img src="{{ movie_data['Poster'] }}" alt="{{ movie_data['Title'] }} Poster"></li>
                 <li><strong>Director:</strong> {{ movie_data['Director'] }}</li>
                 <li><strong>Year:</strong> {{ movie_data['Year'] }}</li>
@@ -19,7 +20,5 @@
             <p>No movie data found for the provided title.
                 {{ movie_data.Error }}</p>
         {% endif %}
-    <a href ="{{ url_for('user_movies', user_id=user_id, movie_id=movie_id) }}" class="btn btn-danger">Add</a>
-    <a href ="{{ url_for('list_users', user_id=user_id) }}" class="btn btn-secondary">Cancel</a>
 </body>
 </html>

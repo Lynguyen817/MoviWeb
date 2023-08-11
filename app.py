@@ -20,9 +20,11 @@ def home():
 def search_movie():
     """Return a movie that the user searches."""
     title = request.args.get('title')
+    print(title)
     movie_data = data_manager.load_movies_data(title)
+    print(movie_data)
 
-    if movie_data.get('Response') == 'False':
+    if movie_data and movie_data.get('Response') == 'False':
         return "Movie not found", 404
 
     return render_template('search_movie.html', movie_data=movie_data)

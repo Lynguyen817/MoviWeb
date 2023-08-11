@@ -12,12 +12,11 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body class="homepage">
-
         <nav class="navbar bg-body-tertiary">
           <div class="container-fluid">
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Enter a movie name" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit"><a href="/search_movie">Search</a></button>
+            <form action="/search_movie" method="GET" class="d-flex" role="search">
+              <input class="form-control me-2" type="search" placeholder="Enter a movie name" aria-label="Search" id="title" name="title" required >
+              <button class="btn btn-outline-success" type="submit" value="Search">Search</button>
             </form>
           </div>
         </nav>
@@ -33,6 +32,5 @@
                     </li>
                 {% endfor %}
             </ul>
-
 </body>
 </html>

@@ -12,10 +12,16 @@ class JSONDataManager(DataManagerInterface):
         """Load movies from the api link when a title is input."""
         API_KEY = "cfb1ce63"
         API_MOVIE_URL = f"http://www.omdbapi.com/?t={title}&apikey={API_KEY}"
-        res = requests.get(API_MOVIE_URL)
-        movies_data = json.loads(res.text)
-        print(movies_data)
-        return movies_data
+
+        try:
+            res = requests.get(API_MOVIE_URL)
+            res.raise_for_status()  # Raise an exception for HTTP errors
+            movies_data = json.loads(res.text)
+            print(movies_data)
+            return movies_data
+        except requests.exceptions.RequestException as e:
+            print("Request Error:", e)
+            return None
 
     def get_all_users(self):
         """ Return all the users."""
@@ -59,7 +65,7 @@ class JSONDataManager(DataManagerInterface):
         for user in list_of_users:
             if user["id"] == int(user_id.strip("<>")):
                 # Get a new movie from API
-                new_movie_from_api = self.load_movies_data(movie_title)
+                new_movie_from_api = load_movies_data(movie_title)
 
                 if new_movie_from_api.get("Response") == "False":
                     return None
@@ -124,3 +130,7 @@ class JSONDataManager(DataManagerInterface):
                     save_file.write(json_file)
                 return True
         return False
+
+
+
+
